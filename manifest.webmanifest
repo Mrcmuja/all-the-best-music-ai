@@ -1,0 +1,11 @@
+
+{
+  "name": "ALL THE BEST MUSIC AI",
+  "short_name": "BEST MUSIC AI",
+  "description": "Cipta lagu menggunakan AI",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#10101c",
+  "theme_color": "#10101c",
+  "orientation": "portrait"
+}
