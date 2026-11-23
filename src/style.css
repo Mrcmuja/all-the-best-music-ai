@@ -1,1 +1,44 @@
-CSS.
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #10101c;
+  color: white;
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.container {
+  width: min(100% - 32px, 900px);
+  margin: auto;
+}
+
+.card {
+  background: #202033;
+  padding: 20px;
+  border-radius: 16px;
+  margin: 16px 0;
+}
+
+h1, h2 {
+  color: #ffffff;
+}
+
+button.primary {
+  background: #8b5cf6;
+  color: white;
+  border: 0;
+  padding: 12px 20px;
+  border-radius: 10px;
+}
+
