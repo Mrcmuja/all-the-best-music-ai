@@ -1,13 +1,58 @@
 
+
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./style.css";
+
+const API_URL =
+  "https://all-the-best-music-ai.gamersever2020.workers.dev";
 
 function App() {
   const [songTitle, setSongTitle] = useState("");
   const [lyrics, setLyrics] = useState("");
   const [genre, setGenre] = useState("Pop");
   const [language, setLanguage] = useState("Bahasa Melayu");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function createLyrics() {
+    if (!lyrics.trim()) {
+      setError("Sila masukkan idea atau jalan cerita lagu dahulu.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: songTitle,
+          genre: genre,
+          language: language,
+          idea: lyrics
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Gagal menjana lirik.");
+      }
+
+      setLyrics(data.lyrics);
+    } catch (err) {
+      setError(
+        err.message || "Tidak dapat menghubungi sistem AI. Cuba lagi."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <main className="container">
@@ -25,7 +70,10 @@ function App() {
         />
 
         <label>Genre muzik</label>
-        <select value={genre} onChange={(e) => setGenre(e.target.value)}>
+        <select
+          value={genre}
+          onChange={(e) => setGenre(e.target.value)}
+        >
           <option>Pop</option>
           <option>Rock</option>
           <option>Dangdut</option>
@@ -36,7 +84,10 @@ function App() {
         </select>
 
         <label>Bahasa lagu</label>
-        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+        <select
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+        >
           <option>Bahasa Melayu</option>
           <option>English</option>
           <option>Indonesia</option>
@@ -45,27 +96,30 @@ function App() {
           <option>Arabic</option>
         </select>
 
-        <label>Lirik lagu</label>
+        <label>Idea atau jalan cerita lagu</label>
         <textarea
           value={lyrics}
           onChange={(e) => setLyrics(e.target.value)}
-          placeholder="Tulis lirik lagu anda di sini..."
+          placeholder="Contoh: Lagu tentang cinta, kerinduan dan kehidupan..."
           rows="7"
         />
 
         <button
           className="primary"
-          onClick={() =>
-            alert("Demo sahaja. Penjanaan muzik AI sebenar belum disambungkan.")
-          }
+          onClick={createLyrics}
+          disabled={loading}
         >
-          🎶 Cipta Lagu AI
+          {loading ? "⏳ Sedang mencipta lirik..." : "🎶 Cipta Lirik AI"}
         </button>
+
+        {error && <p role="alert">{error}</p>}
       </section>
 
       <section className="card">
         <h2>Perpustakaan Muzik</h2>
-        <p>Lagu yang anda cipta akan dipaparkan di sini apabila sistem muzik sebenar disambungkan.</p>
+        <p>
+          Lirik yang dijana boleh disalin dan disimpan oleh pengguna.
+        </p>
       </section>
 
       <p>© ALL THE BEST MUSIC AI</p>
