@@ -41,8 +41,10 @@ function App() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Gagal menjana lirik.");
-      }
+        throw new Error(
+  (data.error || "Gagal menjana lirik.") +
+  (data.details ? " — " + data.details : "")
+); 
 
       setLyrics(data.lyrics);
     } catch (err) {
